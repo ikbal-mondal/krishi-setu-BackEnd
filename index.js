@@ -17,7 +17,6 @@ app.get("/", (req, res) => {
   res.send("Krishi-Setu Server is running ");
 });
 
-// MongoDB setup
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.azkcydb.mongodb.net/?appName=Cluster0`;
 
 //  Load Firebase Admin credentials
@@ -29,7 +28,6 @@ const serviceAccount = JSON.parse(decoded);
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
 });
-console.log(" Firebase Admin initialized successfully!");
 
 //  Mongo client setup
 const client = new MongoClient(uri, {
@@ -58,7 +56,6 @@ async function verifyFirebaseToken(req, res, next) {
     };
     next();
   } catch (err) {
-    console.error("Token verification failed:", err);
     return res.status(401).json({ error: "Invalid token" });
   }
 }
@@ -68,8 +65,6 @@ async function run() {
     // await client.connect();
     const db = client.db("Krishi-Setu");
     const cropsCollection = db.collection("crops");
-
-    console.log(" MongoDB connected successfully!");
 
     // ===============================
     //  Add New Crop (Private Route)
@@ -106,7 +101,6 @@ async function run() {
           insertedId: result.insertedId,
         });
       } catch (err) {
-        console.error(" Error adding crop:", err);
         res.status(500).json({ error: "Failed to add crop" });
       }
     });
@@ -199,7 +193,6 @@ async function run() {
             return res.status(500).json({ error: "Could not add interest" });
           }
         } catch (err) {
-          console.error(" Error creating interest:", err);
           res.status(500).json({ error: "Server error" });
         }
       }
@@ -239,7 +232,6 @@ async function run() {
 
         res.status(200).json(userInterests);
       } catch (err) {
-        console.error(" Error fetching user interests:", err);
         res.status(500).json({ error: "Failed to fetch interests" });
       }
     });
@@ -294,7 +286,6 @@ async function run() {
             return res.status(500).json({ error: "Could not update interest" });
           }
         } catch (err) {
-          console.error(" Error updating interest:", err);
           res.status(500).json({ error: "Server error" });
         }
       }
@@ -314,7 +305,6 @@ async function run() {
 
         res.status(200).json(myCrops);
       } catch (err) {
-        console.error(" Error fetching my posts:", err);
         res.status(500).json({ error: "Failed to fetch user crops" });
       }
     });
@@ -340,7 +330,6 @@ async function run() {
 
         res.status(200).json({ message: "Crop updated successfully", updated });
       } catch (err) {
-        console.error(" Error updating crop:", err);
         res.status(500).json({ error: "Failed to update crop" });
       }
     });
@@ -362,13 +351,10 @@ async function run() {
         await cropsCollection.deleteOne({ _id: new ObjectId(id) });
         res.status(200).json({ message: "Crop deleted successfully" });
       } catch (err) {
-        console.error(" Error deleting crop:", err);
         res.status(500).json({ error: "Failed to delete crop" });
       }
     });
-  } catch (error) {
-    console.error(" Error:", error);
-  }
+  } catch (error) {}
 }
 run();
 
