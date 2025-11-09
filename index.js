@@ -66,9 +66,8 @@ async function run() {
     const db = client.db("Krishi-Setu");
     const cropsCollection = db.collection("crops");
 
-    // ===============================
     //  Add New Crop (Private Route)
-    // ===============================
+
     app.post("/api/crops", verifyFirebaseToken, async (req, res) => {
       try {
         const crop = req.body;
@@ -236,9 +235,8 @@ async function run() {
       }
     });
 
-    // ===============================
     //  Accept/Reject Interest
-    // ===============================
+
     app.put(
       "/api/crops/:cropId/interests/:interestId",
       verifyFirebaseToken,
