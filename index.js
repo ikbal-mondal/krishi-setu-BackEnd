@@ -13,7 +13,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 
-// Root test route
 app.get("/", (req, res) => {
   res.send("Krishi-Setu Server is running ");
 });
