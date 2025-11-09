@@ -1,0 +1,6 @@
+node_modules/
+.env
+krishi-setu-firebase-adminsdk.json
+
+
+.vercel
