@@ -15,13 +15,13 @@ app.use(cors());
 
 // Root test route
 app.get("/", (req, res) => {
-  res.send("Krishi-Setu Server is running 🚀");
+  res.send("Krishi-Setu Server is running ");
 });
 
 // MongoDB setup
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.azkcydb.mongodb.net/?appName=Cluster0`;
 
-// ✅ Load Firebase Admin credentials
+//  Load Firebase Admin credentials
 const decoded = Buffer.from(process.env.FB_SERVICE_KEY, "base64").toString(
   "utf8"
 );
@@ -30,9 +30,9 @@ const serviceAccount = JSON.parse(decoded);
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
 });
-console.log("✅ Firebase Admin initialized successfully!");
+console.log(" Firebase Admin initialized successfully!");
 
-// ✅ Mongo client setup
+//  Mongo client setup
 const client = new MongoClient(uri, {
   serverApi: {
     version: ServerApiVersion.v1,
@@ -41,7 +41,7 @@ const client = new MongoClient(uri, {
   },
 });
 
-// ✅ Verify Firebase token middleware
+//  Verify Firebase token middleware
 async function verifyFirebaseToken(req, res, next) {
   const authHeader = req.headers.authorization || "";
   const token = authHeader.startsWith("Bearer ")
@@ -70,10 +70,10 @@ async function run() {
     const db = client.db("Krishi-Setu");
     const cropsCollection = db.collection("crops");
 
-    console.log("✅ MongoDB connected successfully!");
+    console.log(" MongoDB connected successfully!");
 
     // ===============================
-    // ✅ Add New Crop (Private Route)
+    //  Add New Crop (Private Route)
     // ===============================
     app.post("/api/crops", verifyFirebaseToken, async (req, res) => {
       try {
@@ -107,13 +107,13 @@ async function run() {
           insertedId: result.insertedId,
         });
       } catch (err) {
-        console.error("❌ Error adding crop:", err);
+        console.error(" Error adding crop:", err);
         res.status(500).json({ error: "Failed to add crop" });
       }
     });
 
     // ===============================
-    // ✅ Get All Crops
+    //  Get All Crops
     // ===============================
     app.get("/api/crops", async (req, res) => {
       try {
@@ -129,7 +129,7 @@ async function run() {
     });
 
     // ===============================
-    // ✅ Get Single Crop by ID
+    //  Get Single Crop by ID
     // ===============================
     app.get("/api/crops/:id", async (req, res) => {
       try {
@@ -143,7 +143,7 @@ async function run() {
     });
 
     // ===============================
-    // ✅ Create Interest (Private)
+    //  Create Interest (Private)
     // ===============================
     app.post(
       "/api/crops/:id/interests",
@@ -200,13 +200,13 @@ async function run() {
             return res.status(500).json({ error: "Could not add interest" });
           }
         } catch (err) {
-          console.error("❌ Error creating interest:", err);
+          console.error(" Error creating interest:", err);
           res.status(500).json({ error: "Server error" });
         }
       }
     );
 
-    // ✅ Get all interests sent by logged-in user
+    //  Get all interests sent by logged-in user
     app.get("/api/my-interests", verifyFirebaseToken, async (req, res) => {
       try {
         const userEmail = req.user.email;
@@ -240,13 +240,13 @@ async function run() {
 
         res.status(200).json(userInterests);
       } catch (err) {
-        console.error("❌ Error fetching user interests:", err);
+        console.error(" Error fetching user interests:", err);
         res.status(500).json({ error: "Failed to fetch interests" });
       }
     });
 
     // ===============================
-    // ✅ Accept/Reject Interest
+    //  Accept/Reject Interest
     // ===============================
     app.put(
       "/api/crops/:cropId/interests/:interestId",
@@ -295,13 +295,13 @@ async function run() {
             return res.status(500).json({ error: "Could not update interest" });
           }
         } catch (err) {
-          console.error("❌ Error updating interest:", err);
+          console.error(" Error updating interest:", err);
           res.status(500).json({ error: "Server error" });
         }
       }
     );
 
-    // ✅ Get all crops of logged-in user
+    //  Get all crops of logged-in user
     app.get("/api/my-posts", verifyFirebaseToken, async (req, res) => {
       try {
         const db = client.db("Krishi-Setu");
@@ -315,12 +315,12 @@ async function run() {
 
         res.status(200).json(myCrops);
       } catch (err) {
-        console.error("❌ Error fetching my posts:", err);
+        console.error(" Error fetching my posts:", err);
         res.status(500).json({ error: "Failed to fetch user crops" });
       }
     });
 
-    // ✅ Update crop
+    //  Update crop
     app.put("/api/crops/:id", verifyFirebaseToken, async (req, res) => {
       try {
         const db = client.db("Krishi-Setu");
@@ -341,12 +341,12 @@ async function run() {
 
         res.status(200).json({ message: "Crop updated successfully", updated });
       } catch (err) {
-        console.error("❌ Error updating crop:", err);
+        console.error(" Error updating crop:", err);
         res.status(500).json({ error: "Failed to update crop" });
       }
     });
 
-    // ✅ Delete crop
+    //  Delete crop
     app.delete("/api/crops/:id", verifyFirebaseToken, async (req, res) => {
       try {
         const db = client.db("Krishi-Setu");
@@ -363,17 +363,17 @@ async function run() {
         await cropsCollection.deleteOne({ _id: new ObjectId(id) });
         res.status(200).json({ message: "Crop deleted successfully" });
       } catch (err) {
-        console.error("❌ Error deleting crop:", err);
+        console.error(" Error deleting crop:", err);
         res.status(500).json({ error: "Failed to delete crop" });
       }
     });
   } catch (error) {
-    console.error("❌ Error:", error);
+    console.error(" Error:", error);
   }
 }
 run();
 
 // ✅ Start the server
 app.listen(port, () => {
-  console.log(`🚀 Krishi-Setu Server running on port ${port}`);
+  console.log(` Krishi-Setu Server running on port ${port}`);
 });
