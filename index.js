@@ -372,7 +372,7 @@ async function run() {
 }
 run();
 
-// ✅ Start the server
+// Start the server
 app.listen(port, () => {
   console.log(` Krishi-Setu Server running on port ${port}`);
 });
