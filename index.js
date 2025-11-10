@@ -37,7 +37,6 @@ const client = new MongoClient(uri, {
     deprecationErrors: true,
   },
 });
-
 //  Verify Firebase token middleware
 async function verifyFirebaseToken(req, res, next) {
   const authHeader = req.headers.authorization || "";
@@ -66,7 +65,7 @@ async function run() {
     const db = client.db("Krishi-Setu");
     const cropsCollection = db.collection("crops");
 
-    //  Add New Crop (Private Route)
+    //  Add New Crop
 
     app.post("/api/crops", verifyFirebaseToken, async (req, res) => {
       try {
@@ -104,9 +103,8 @@ async function run() {
       }
     });
 
-    // ===============================
     //  Get All Crops
-    // ===============================
+
     app.get("/api/crops", async (req, res) => {
       try {
         const crops = await cropsCollection
@@ -120,9 +118,8 @@ async function run() {
       }
     });
 
-    // ===============================
     //  Get Single Crop by ID
-    // ===============================
+
     app.get("/api/crops/:id", async (req, res) => {
       try {
         const { id } = req.params;
@@ -134,9 +131,8 @@ async function run() {
       }
     });
 
-    // ===============================
     //  Create Interest (Private)
-    // ===============================
+
     app.post(
       "/api/crops/:id/interests",
       verifyFirebaseToken,
@@ -356,7 +352,6 @@ async function run() {
 }
 run();
 
-// Start the server
 app.listen(port, () => {
   console.log(` Krishi-Setu Server running on port ${port}`);
 });
